@@ -16,7 +16,7 @@ export default function FormStyle_1(props) {
     }
 
     return (
-        <div className={`FormStyle_1 shade ${props.className}`}>
+        <div className={`FormStyle_1 shade ${props.className}`} style={props.style}>
             {showHeader && <h1 className='FormStyle_1_header'>{header}</h1>}
             {props.logo && <div className='FormStyle_1_logo'>{props.logo}</div>}
 

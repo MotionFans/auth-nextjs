@@ -9,14 +9,13 @@ import Frame_AestheticMetadataPanel from '@/components/miscellaneous/frame_aesth
 import './../../global.css';
 import Magiclink1 from './magiclink1';
 import { useState } from 'react';
-import { generatePublicPrivateKey, get_auth_url } from '@/global';
+import { get_auth_url } from '@/global';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 export default function Login1() {
   const [magiclink, set_magiclink] = useState(false);
   const [email, set_email] = useState(null);
   const [show_captcha, set_show_captcha] = useState(false);
-  const [captcha_token, set_captcha_token] = useState(null);
 
   let github_redirect = new URLSearchParams({
     client_id: "33dcb417e59baabfb1c2",
@@ -40,7 +39,6 @@ export default function Login1() {
     let return_url = null;
     let only_sign_in = false;
 
-    const keys = await generatePublicPrivateKey();
     await fetch(`${get_auth_url()}/login`, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
@@ -51,7 +49,7 @@ export default function Login1() {
       },
       redirect: 'error', // manual, *follow, error
       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify({ only_sign_in: only_sign_in, email: email, publickey: keys.publicKeyNaked, captcha_token: captcha_token })
+      body: JSON.stringify({ only_sign_in: only_sign_in, email: email, captcha_token: captcha_token })
     }).then(response => response.json())
     .then(async data => {
       if (data.ok == true) {
