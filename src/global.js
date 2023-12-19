@@ -36,8 +36,6 @@ async function generatePublicPrivateKey() {
 }
 
 async function handle_new(device_id, private_key) {
-  let random = Math.random() * 100000;
-
   let localAppend = "";
   if (localStorage.getItem("use_prod_servers") != "true" && window.location.hostname.includes("127.0.0.1")) {
     localAppend = "_local";
@@ -48,17 +46,10 @@ async function handle_new(device_id, private_key) {
   }
 
   let authObject = {};
-  const authStatus = await cookies.get(`auth${localAppend}`);
-  if (authStatus) {
-    authObject = {
-      ...authStatus
-    }
-  }
 
   authObject = {
-    ...authStatus,
     device_id: device_id,
-    privatekey: privatekey,
+    privatekey: private_key,
     type: "elliptic"
   }
 
@@ -66,9 +57,6 @@ async function handle_new(device_id, private_key) {
   if (window.location.origin.startsWith("https://127.0.0.1") || window.location.origin.startsWith("http://127.0.0.1")) {
     domain = "127.0.0.1";
   }
-
-  let expirationDate = new Date();
-  expirationDate.setFullYear(expirationDate.getFullYear() + 10);
 
   await localStorage.setItem(`auth${localAppend}`, JSON.stringify(authObject));
 }

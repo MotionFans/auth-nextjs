@@ -69,12 +69,16 @@ export default function Login1() {
     });
   }
 
+  function on_login_start() {
+    set_show_captcha(true);
+  }
+
   return (
     <Frame_AestheticMetadataPanel>
-      <FormStyle_1>
+      <FormStyle_1 header="Login / Signup">
         <div className='FormStyle_1_div'>
-          <Input_with_header header="Email" placeholder={`name@${process.env.NEXT_PUBLIC_email_placeholder_domain}`} value={email} onChange={(e) => { set_email(e.target.value); }}/>
-          {show_captcha == false && <button className='FormStyle_1_div_login_button' onClick={() => { set_show_captcha(true); }}>Login</button>}
+          <Input_with_header header="Email" placeholder={`name@${process.env.NEXT_PUBLIC_email_placeholder_domain}`} value={email} onChange={(e) => { set_email(e.target.value); }} onKeyPress={() => { on_login_start(); }}/>
+          {show_captcha == false && <button className='FormStyle_1_div_login_button' onClick={() => { on_login_start(); }}>Login</button>}
           {show_captcha == true && <HCaptcha
             sitekey="9a1a8707-24b1-48f8-aa43-5f47f2a9e8cf"
             size="normal"
