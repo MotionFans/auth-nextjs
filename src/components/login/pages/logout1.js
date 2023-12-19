@@ -3,6 +3,7 @@ import './css/logout1.css';
 import FormStyle_1 from '../forms/form_style1';
 import './../../global.css';
 import { logout } from '@/global';
+import Frame_AestheticMetadataPanel from '@/components/miscellaneous/frame_aesthetic_metadata_panel';
 
 export default function Logout1() {
   return (
