@@ -76,4 +76,14 @@ async function credentials_object() {
   return { deviceid: deviceId, privatekey: authData.private_key };
 }
 
-export { get_auth_url, get_api_url, generatePublicPrivateKey, handle_new, credentials_object }
+async function logout() {
+  // TODO: Should be signaling to the backend the credential is no longer valid and await verification it was removed.
+  let localAppend = "";
+  if (localStorage.getItem("use_prod_servers") != "true" && window.location.origin.includes("127.0.0.1")) { //window.location.origin.includes("127.0.0.1") IS DANGEROUS IF YOU DON'T CHECK FOR A DOT. IF THERE IS A DOT IN THE HOSTNAME THEN IT'S A DOMAIN AND NOT THE REAL LOCALHOST. IT'S FINE IN THIS SPECIFIC CASE THOUGH.
+    localAppend = "_local";
+  }
+
+  await localStorage.removeItem(`auth${localAppend}`);
+}
+
+export { get_auth_url, get_api_url, generatePublicPrivateKey, handle_new, credentials_object, logout }
