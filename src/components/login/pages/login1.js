@@ -26,7 +26,8 @@ export default function Login1() {
   let microsoft_redirect = new URLSearchParams({
     client_id: "bfc94aca-fd29-4b90-be54-306cc673febb",
     redirect_uri: "https://auth.motionfans.com/oauth/microsoft",
-    scope: "user.read"
+    scope: "user.read",
+    response_type: "code"
   });
 
   if (magiclink == true) {

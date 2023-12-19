@@ -64,11 +64,11 @@ async function credentials_object() {
 
   if (!authData) {
     console.log("No auth data found.");
-    return {};
+    return null;
   }
   if (authData.type != "elliptic") {
     await localStorage.removeItem(`auth${localAppend}`)
-    return {};
+    return null;
   }
 
   const deviceId = await authData.device_id;
