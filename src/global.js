@@ -45,20 +45,35 @@ async function handle_new(device_id, private_key) {
     return null;
   }
 
-  let authObject = {};
-
-  authObject = {
+  let authObject = {
     device_id: device_id,
-    privatekey: private_key,
+    private_key: private_key,
     type: "elliptic"
-  }
-
-  let domain = ".motionfans.com";
-  if (window.location.origin.startsWith("https://127.0.0.1") || window.location.origin.startsWith("http://127.0.0.1")) {
-    domain = "127.0.0.1";
   }
 
   await localStorage.setItem(`auth${localAppend}`, JSON.stringify(authObject));
 }
 
-export { get_auth_url, get_api_url, generatePublicPrivateKey, handle_new }
+async function credentials_object() {
+  let localAppend = "";
+  if (localStorage.getItem("use_prod_servers") != "true" && window.location.origin.includes("127.0.0.1")) { //window.location.origin.includes("127.0.0.1") IS DANGEROUS IF YOU DON'T CHECK FOR A DOT. IF THERE IS A DOT IN THE HOSTNAME THEN IT'S A DOMAIN AND NOT THE REAL LOCALHOST. IT'S FINE IN THIS SPECIFIC CASE THOUGH.
+    localAppend = "_local";
+  }
+
+  const authData = JSON.parse(await localStorage.getItem(`auth${localAppend}`));
+
+  if (!authData) {
+    console.log("No auth data found.");
+    return {};
+  }
+  if (authData.type != "elliptic") {
+    await localStorage.removeItem(`auth${localAppend}`)
+    return {};
+  }
+
+  const deviceId = await authData.device_id;
+
+  return { deviceid: deviceId, privatekey: authData.private_key };
+}
+
+export { get_auth_url, get_api_url, generatePublicPrivateKey, handle_new, credentials_object }
