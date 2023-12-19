@@ -20,7 +20,8 @@
 
 .magiclink_wesentalink {
     font-size: 15px;
-    width: max-content;
     margin-top: 0px;
     margin-bottom: 0px;
+    text-align: center;
+    width: 100%;
 }

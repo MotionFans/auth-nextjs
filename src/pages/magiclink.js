@@ -5,7 +5,7 @@ import FormStyle_1 from "@/components/login/forms/form_style1";
 import { generatePublicPrivateKey, get_auth_url, handle_new } from '@/global';
 import { useEffect, useRef, useState } from 'react';
 
-export default function magiclink() {
+export default function Magiclink(props) {
     const [error, set_error] = useState(null);
 
     const shouldSend = useRef(true);
@@ -16,7 +16,7 @@ export default function magiclink() {
         let body = {
             public_key: keys.publicKeyNaked,
             code: code,
-            type: params.get("type")
+            type: props.type
         }
 
         await fetch(`${get_auth_url()}/magiclink`, {

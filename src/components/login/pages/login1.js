@@ -17,6 +17,7 @@ export default function Login1() {
   const [email, set_email] = useState(null);
   const [show_captcha, set_show_captcha] = useState(false);
 
+  // TODO: SET A STATE PARAM TO BLOCK CLICK-JACKING.
   let github_redirect = new URLSearchParams({
     client_id: "33dcb417e59baabfb1c2",
     redirect_uri: "https://auth.motionfans.com/oauth/github",
