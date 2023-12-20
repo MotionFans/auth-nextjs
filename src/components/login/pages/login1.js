@@ -28,7 +28,8 @@ export default function Login1() {
     client_id: "bfc94aca-fd29-4b90-be54-306cc673febb",
     redirect_uri: "https://auth.motionfans.com/oauth/microsoft",
     scope: "user.read",
-    response_type: "code"
+    response_type: "code",
+    response_mode: "query"
   });
 
   if (magiclink == true) {
