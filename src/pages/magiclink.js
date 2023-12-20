@@ -8,16 +8,45 @@ import { useEffect, useRef, useState } from 'react';
 export default function Magiclink(props) {
     const [error, set_error] = useState(null);
 
+    // TODO: ADD STATE PARAMS TO BLOCK CLICKJACKING!
+
     const shouldSend = useRef(true);
 
-    async function send_magiclink(code, params) {
-        const keys = await generatePublicPrivateKey();
+    async function send_magiclink(code_input, params) {
+        let code = code_input;
 
-        let body = {
-            public_key: keys.publicKeyNaked,
-            code: code,
-            type: props.type
+        if (props.type == "microsoft") {
+            await fetch(`${get_auth_url()}/code-exchange/microsoft`, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    code: code,
+                    type: `${window.location.protocol}//${window.location.hostname}${window.location.pathname}`
+                }),
+                redirect: 'error', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            }).then(response => response.json())
+            .then(async data => {
+                if (data.invalidOrExpired) {
+                    alert(data.message);
+                    return;
+                }
+                if (data.ok == true) {
+                    // await localStorage.setItem("ms_access_token", data.access_token);
+                    code = data.access_token;
+                }
+                if (data.error == true) {
+                    set_error(data.message);
+                }
+            });
         }
+        
+        const keys = await generatePublicPrivateKey();
 
         await fetch(`${get_auth_url()}/magiclink`, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -27,7 +56,11 @@ export default function Magiclink(props) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(body),
+            body: JSON.stringify({
+                public_key: keys.publicKeyNaked,
+                code: code,
+                type: props.type
+            }),
             redirect: 'error', // manual, *follow, error
             referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
         }).then(response => response.json())

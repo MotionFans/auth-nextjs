@@ -94,6 +94,8 @@ export default function Login1() {
           <Login_With service="Microsoft" icon="https://www.microsoft.com/favicon.ico?v2" redirect={`https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${microsoft_redirect.toString()}`}/>
           <Login_With service="Github" icon="https://github.com/favicon.ico" redirect={`https://github.com/login/oauth/authorize?${github_redirect.toString()}`}/>
         </div>
+
+        <p className='you_agree_to'>By continuing or using MotionFans products/services, you agree to the <a className='greyText' href="https://motionfans.com/terms-of-service">Terms of Service</a> and <a className='greyText' href="https://motionfans.com/privacy">Privacy Policy</a></p>
       </FormStyle_1>
     </Frame_AestheticMetadataPanel>
   );
