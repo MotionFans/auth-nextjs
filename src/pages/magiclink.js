@@ -14,6 +14,7 @@ export default function Magiclink(props) {
 
     async function send_magiclink(code_input, params) {
         let code = code_input;
+        let error = false;
 
         if (props.type == "microsoft") {
             await fetch(`${get_auth_url()}/code-exchange/microsoft`, {
@@ -26,7 +27,7 @@ export default function Magiclink(props) {
                 },
                 body: JSON.stringify({
                     code: code,
-                    type: `${window.location.protocol}//${window.location.hostname}${window.location.pathname}`
+                    redirect_uri: `${window.location.protocol}//${window.location.hostname}${window.location.pathname}`
                 }),
                 redirect: 'error', // manual, *follow, error
                 referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
@@ -42,8 +43,13 @@ export default function Magiclink(props) {
                 }
                 if (data.error == true) {
                     set_error(data.message);
+                    error = true;
                 }
             });
+        }
+
+        if (error == true) {
+            return;
         }
         
         const keys = await generatePublicPrivateKey();
