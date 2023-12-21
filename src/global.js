@@ -86,4 +86,52 @@ async function logout() {
   await localStorage.removeItem(`auth${localAppend}`);
 }
 
-export { get_auth_url, get_api_url, generatePublicPrivateKey, handle_new, credentials_object, logout }
+async function encrypt_data_with_public_key(publicKey, data) {
+  const encryptedData = await window.crypto.subtle.encrypt(
+    {
+      name: "RSA-OAEP",
+    },
+    publicKey,
+    new TextEncoder().encode(data)
+  );
+
+  return encryptedData;
+}
+
+function array_buffer_to_base64(buffer) {
+  const binary = new Uint8Array(buffer);
+  return btoa(String.fromCharCode(...binary));
+}
+
+async function import_rsa_publickey(publicKeyString) {
+  const keyData = new TextEncoder().encode(publicKeyString);
+  const importedKey = await window.crypto.subtle.importKey(
+    "spki",
+    keyData,
+    {
+      name: "RSA-OAEP",
+      hash: "SHA-256",
+    },
+    true,
+    ["encrypt", "decrypt"]
+  );
+
+  return importedKey;
+}
+
+async function spkiToPem(spkiBuffer) {
+  const exportedAsString = String.fromCharCode.apply(null, new Uint8Array(spkiBuffer));
+  const exportedAsBase64 = btoa(exportedAsString);
+
+  const pemHeader = "-----BEGIN PUBLIC KEY-----\n";
+  const pemFooter = "\n-----END PUBLIC KEY-----\n";
+
+  let pemBody = "";
+  for (let i = 0; i < exportedAsBase64.length; i += 64) {
+    pemBody += exportedAsBase64.substring(i, i + 64);
+  }
+
+  return pemHeader + pemBody + pemFooter;
+}
+
+export { get_auth_url, get_api_url, generatePublicPrivateKey, handle_new, credentials_object, logout, encrypt_data_with_public_key, array_buffer_to_base64, import_rsa_publickey, spkiToPem };

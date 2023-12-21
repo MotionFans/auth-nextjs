@@ -95,7 +95,7 @@ export default function Magiclink(props) {
         const code = params.get("code");
 
         send_magiclink(code, params);
-    })
+    });
     
     return (
         <Base style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "100%", height: "100vh" }}>
