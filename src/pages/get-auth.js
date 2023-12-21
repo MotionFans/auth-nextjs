@@ -13,7 +13,7 @@ export default function GetAuth() {
         }
         if (document.referrer) {
             const referrer = new URL(document.referrer);
-            if (referrer != "motionfans.com" && referrer != "127.0.0.1" && !referrer.hostname.endsWith(".motionfans.com")) {
+            if (referrer.hostname != "motionfans.com" && referrer.hostname != "127.0.0.1" && !referrer.hostname.endsWith(".motionfans.com")) {
                 alert("A referrer was specified, and it is not a motionfans webpage.");
                 return;
             }
