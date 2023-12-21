@@ -1,13 +1,11 @@
 import Loading from "@/components/navigating/in-progress/loading";
 import { useEffect, useRef } from "react";
-import { ec } from "elliptic";
-import { credentials_object, encrypt_data_with_public_key, import_rsa_publickey, spkiToPem } from "@/global";
+import { credentials_object } from "@/global";
 
 export default function GetAuth() {
     const shouldSend = useRef(true);
 
     async function handle_request_for_credentials(url, public_key) {
-        alert(public_key);
         const credentials_objectv = await credentials_object();
         if (credentials_objectv) {
             alert("You aren't logged in.");
