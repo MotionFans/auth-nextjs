@@ -92,7 +92,7 @@ export default function GetAuth() {
 
         // let encryptedObjectBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedObject)));
 
-        url_data.searchParams.set("credentials", new TextEncoder().encode(new Uint8Array(encryptedObject)));
+        url_data.searchParams.set("credentials", btoa(encryptedObject));
 
         window.location.href = url_data.href;
     }
