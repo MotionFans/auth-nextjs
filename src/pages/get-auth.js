@@ -90,9 +90,9 @@ export default function GetAuth() {
 
         // encryptedObject.byteLength
 
-        // let encryptedObjectBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedObject)));
+        let encryptedObjectBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedObject)));
 
-        url_data.searchParams.set("credentials", btoa(encryptedObject));
+        url_data.searchParams.set("credentials", encryptedObjectBase64);
 
         window.location.href = url_data.href;
     }
