@@ -76,9 +76,10 @@ export default function Magiclink(props) {
                 return;
             }
             if (data.ok == true) {
-                handle_new(data.device_id, keys.privateKeyNaked);
+                await handle_new(data.device_id, keys.privateKeyNaked);
+                alert("done");
                 if (await localStorage.getItem("returnUrl")) {
-                    await handleReturnUrl();
+                    // await handleReturnUrl();
                 }
             }
             if (data.error == true) {
