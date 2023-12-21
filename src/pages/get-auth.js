@@ -87,11 +87,12 @@ export default function GetAuth() {
             publicKeyImported,
             objectBuffer
         );
-        
-        // Put the encrypted data into a search param
-        let encryptedObjectBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedObject)));
 
-        url_data.searchParams.set("credentials", encryptedObjectBase64);
+        // encryptedObject.byteLength
+
+        // let encryptedObjectBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedObject)));
+
+        url_data.searchParams.set("credentials", new TextEncoder().encode(new Uint8Array(encryptedObject)));
 
         window.location.href = url_data.href;
     }
