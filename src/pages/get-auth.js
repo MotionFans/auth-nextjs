@@ -7,7 +7,7 @@ export default function GetAuth() {
 
     async function handle_request_for_credentials(url, public_key) {
         const credentials_objectv = await credentials_object();
-        if (credentials_objectv) {
+        if (!credentials_objectv) {
             alert("You aren't logged in.");
             return;
         }
@@ -78,12 +78,11 @@ export default function GetAuth() {
             ["encrypt"]
         );
         
-        let object = { message: "Hello world" };
-        let objectString = JSON.stringify(object);
+        let objectString = JSON.stringify(credentials_objectv);
         let objectBuffer = new TextEncoder().encode(objectString);
         let encryptedObject = await window.crypto.subtle.encrypt(
             {
-            name: "RSA-OAEP",
+                name: "RSA-OAEP",
             },
             publicKeyImported,
             objectBuffer
