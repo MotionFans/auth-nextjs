@@ -76,7 +76,7 @@ export default function Magiclink(props) {
                 return;
             }
             if (data.ok == true) {
-                await handle_new(data.device_id, keys.privateKeyNaked);
+                await handle_new(data.deviceID, keys.privateKeyNaked);
                 alert("done");
                 if (await localStorage.getItem("returnUrl")) {
                     // await handleReturnUrl();

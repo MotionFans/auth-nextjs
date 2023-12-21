@@ -47,8 +47,7 @@ async function handle_new(device_id, private_key) {
 
   let authObject = {
     device_id: device_id,
-    private_key: private_key,
-    type: "elliptic"
+    private_key: private_key
   }
 
   await localStorage.setItem(`auth${localAppend}`, JSON.stringify(authObject));
