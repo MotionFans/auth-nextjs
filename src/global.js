@@ -85,4 +85,36 @@ async function logout() {
   await localStorage.removeItem(`auth${localAppend}`);
 }
 
-export { get_auth_url, get_api_url, generatePublicPrivateKey, handle_new, credentials_object, logout };
+function is_motionfans_site(url) {
+  let ok = false;
+
+  let url_data = null;
+  try {
+    url_data = new URL(url);
+    if (url_data.hostname != "127.0.0.1" && url_data.hostname != "motionfans.com" && !url_data.hostname.endsWith(".motionfans.com")) {
+      // not a motionfans webpage.
+    } else {
+      ok = true;
+    }
+  } catch (error) {
+    // probably an invalid url.
+  }
+
+  // just in the future if MotionFans ever proxies return URLs and this gets caught up in there for some very stupid reason, that would allow credentials to go to bad webpages.
+  let url_data_params = new URLSearchParams(url_data.search);
+  if (url_data_params.get("return_url")) {
+    try {
+      if (is_motionfans_site(url_data_params.get("return_url")) != true) {
+        throw "bad url.";
+      }
+    } catch (error) {
+      alert("A return_url was provided within the return_url, but it is not a motionfans site.");
+
+      ok = false;
+    }
+  }
+
+  return ok;
+}
+
+export { get_auth_url, get_api_url, generatePublicPrivateKey, handle_new, credentials_object, logout, is_motionfans_site };

@@ -2,7 +2,7 @@
 import './../components/login/pages/css/magiclink1.css';
 import Base from "@/components/base";
 import FormStyle_1 from "@/components/login/forms/form_style1";
-import { generatePublicPrivateKey, get_auth_url, handle_new } from '@/global';
+import { generatePublicPrivateKey, get_auth_url, handle_new, is_motionfans_site } from '@/global';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Magiclink(props) {
@@ -78,8 +78,22 @@ export default function Magiclink(props) {
             if (data.ok == true) {
                 await handle_new(data.deviceID, keys.privateKeyNaked);
                 alert("done");
-                if (await localStorage.getItem("returnUrl")) {
-                    // await handleReturnUrl();
+
+                const return_url = await localStorage.getItem("return_url");
+                if (return_url) {
+                    try {
+                        new URL(return_url);
+                    } catch (error) {
+                        alert("return_url is invalid");
+                        return;
+                    }
+
+                    if (is_motionfans_site(return_url) != true) {
+                        alert("return_url is not a valid motionfans site.");
+                        return;
+                    }
+
+                    window.location.href = return_url;
                 }
             }
             if (data.error == true) {

@@ -1,6 +1,6 @@
 import Loading from "@/components/navigating/in-progress/loading";
 import { useEffect, useRef } from "react";
-import { credentials_object } from "@/global";
+import { credentials_object, is_motionfans_site } from "@/global";
 
 export default function GetAuth() {
     const shouldSend = useRef(true);
@@ -22,19 +22,11 @@ export default function GetAuth() {
         let url_data = null;
         try {
             url_data = new URL(url);
-            if (url_data.hostname != "127.0.0.1" && url_data.hostname != "motionfans.com" && !url_data.hostname.endsWith(".motionfans.com")) {
-                alert("The return_url is not a motionfans webpage.");
-                return;
+            if (is_motionfans_site(url) != true) {
+                throw "bad url.";
             }
         } catch (error) {
             alert("Bad URL provided.");
-            return;
-        }
-
-        // just in the future if MotionFans ever proxies return URLs for some very stupid reason and this gets caught up in there, that would allow credentials to go to bad webpages.
-        let url_data_params = new URLSearchParams(url_data.search);
-        if (url_data_params.get("return_url")) {
-            alert("The specified return_url cannot have a return_url within it.");
             return;
         }
         
@@ -87,8 +79,6 @@ export default function GetAuth() {
             publicKeyImported,
             objectBuffer
         );
-
-        // encryptedObject.byteLength
 
         let encryptedObjectBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedObject)));
 

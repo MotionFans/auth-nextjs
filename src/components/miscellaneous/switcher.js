@@ -8,7 +8,7 @@ export default function Switcher(props) {
     return (
         <HoverFrame className="switcher_hoverframe" hover={props.children}><button className='switcher hover'>
             <Image src={expand_more}/>
-            <h2 className='Layout_Topbar_header'>{props.header}</h2>
+            <h2 className='layout_Topbar_header'>{props.header}</h2>
         </button></HoverFrame>
     )
 }
